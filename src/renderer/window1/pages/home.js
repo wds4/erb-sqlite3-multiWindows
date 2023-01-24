@@ -1,7 +1,7 @@
 import React from 'react';
-import Masthead from './mastheads/mainMasthead.js';
-import LeftNavbar from './navbars/leftNav.js';
-import * as MiscAppFxns from "./lib/app/misc.ts";
+import Masthead from './mastheads/mainMasthead';
+import LeftNavbar from './navbars/leftNav';
+import * as MiscAppFxns from "./lib/app/misc";
 
 const updateMainColWidth = MiscAppFxns.updateMainColWidth;
 

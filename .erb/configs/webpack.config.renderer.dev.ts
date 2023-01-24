@@ -45,16 +45,18 @@ const configuration: webpack.Configuration = {
 
   target: ['web', 'electron-renderer'],
 
-  entry: [
-    `webpack-dev-server/client?http://localhost:${port}/dist`,
-    'webpack/hot/only-dev-server',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
-  ],
+  entry: {
+    window1: [
+      `webpack-dev-server/client?http://localhost:${port}/dist`,
+      'webpack/hot/only-dev-server',
+      path.join(webpackPaths.srcRendererPath, 'window1/index.tsx'),
+    ],
+  },
 
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: '/',
-    filename: 'renderer.dev.js',
+    filename: '[name].renderer.dev.js',
     library: {
       type: 'umd',
     },
@@ -150,8 +152,10 @@ const configuration: webpack.Configuration = {
     new ReactRefreshWebpackPlugin(),
 
     new HtmlWebpackPlugin({
-      filename: path.join('index.html'),
-      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+      filename: path.join('index1.html'),
+      inject: true,
+      chunks: ['window1'],
+      template: path.join(webpackPaths.srcRendererPath, 'window1/index.ejs'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,

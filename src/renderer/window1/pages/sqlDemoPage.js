@@ -1,8 +1,8 @@
 import React from 'react';
-import Masthead from './mastheads/mainMasthead.js';
-import LeftNavbar from './navbars/leftNav.js';
-import * as MiscAppFxns from "./lib/app/misc.ts";
-import SqlDemoApp from "./sqlDemoApp.js"
+import Masthead from './mastheads/mainMasthead';
+import LeftNavbar from './navbars/leftNav';
+import * as MiscAppFxns from "./lib/app/misc";
+import SqlDemoApp from "./sqlDemoApp"
 
 const updateMainColWidth = MiscAppFxns.updateMainColWidth;
 

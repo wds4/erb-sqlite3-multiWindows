@@ -26,7 +26,7 @@ class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+let window1: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -85,7 +85,7 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-const createWindow = async () => {
+const createWindows = async () => {
   if (isDebug) {
     await installExtensions();
   }
@@ -98,7 +98,7 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  mainWindow = new BrowserWindow({
+  window1 = new BrowserWindow({
     show: false,
     width: 1024,
     height: 728,
@@ -110,28 +110,28 @@ const createWindow = async () => {
     },
   });
 
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  window1.loadURL(resolveHtmlPath('index1.html'));
 
-  mainWindow.on('ready-to-show', () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
+  window1.on('ready-to-show', () => {
+    if (!window1) {
+      throw new Error('"window1" is not defined');
     }
     if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
+      window1.minimize();
     } else {
-      mainWindow.show();
+      window1.show();
     }
   });
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+  window1.on('closed', () => {
+    window1 = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  const menuBuilder1 = new MenuBuilder(window1);
+  menuBuilder1.buildMenu();
 
   // Open urls in the user's browser
-  mainWindow.webContents.setWindowOpenHandler((edata) => {
+  window1.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
@@ -157,11 +157,11 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    createWindow();
+    createWindows();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
+      if (window1 === null) createWindows();
     });
   })
   .catch(console.log);
