@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { asyncSql } from '../index.js';
+import { asyncSql } from '../index';
 
 function SqlDemoApp() {
   const [message, setMessage] = useState('SELECT sqlite_version()');
