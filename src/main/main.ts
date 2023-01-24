@@ -12,10 +12,11 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import sqlite from 'sqlite3';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import webpackPaths from '../../.erb/configs/webpack.paths'
-import sqlite from 'sqlite3';
+import webpackPaths from '../../.erb/configs/webpack.paths';
+
 const sqlite3 = sqlite.verbose();
 
 class AppUpdater {
@@ -37,9 +38,9 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 ipcMain.on('asynchronous-sql-command', async (event, sql) => {
-    db.all(sql, (err, result) => {
-        event.reply('asynchronous-sql-reply', result);
-    });
+  db.all(sql, (err, result) => {
+    event.reply('asynchronous-sql-reply', result);
+  });
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -54,20 +55,18 @@ if (isDebug) {
   require('electron-debug')();
 }
 
-const databaseName = "myCoolDatabase.sqlite3";
-const sqlPath_dev = path.join(webpackPaths.appPath,'sql',databaseName);
-const sqlPath_prod = path.join(app.getPath('userData'), databaseName)
-const sqlPath = isDebug
-  ? sqlPath_dev
-  : sqlPath_prod
+const databaseName = 'myCoolDatabase.sqlite3';
+const sqlPathDev = path.join(webpackPaths.appPath, 'sql', databaseName);
+const sqlPathProd = path.join(app.getPath('userData'), databaseName);
+const sqlPath = isDebug ? sqlPathDev : sqlPathProd;
 
-const sqlPathsInfo = [sqlPath, sqlPath_dev, sqlPath_prod, isDebug]
+const sqlPathsInfo = [sqlPath, sqlPathDev, sqlPathProd, isDebug];
 ipcMain.on('ipc-show-userDataPaths', async (event, arg) => {
   event.reply('ipc-show-userDataPaths', sqlPathsInfo);
 });
 
 const db = new sqlite3.Database(sqlPath, (err) => {
-    if (err) console.error('Database opening error: ', err);
+  if (err) console.error('Database opening error: ', err);
 });
 
 db.serialize(() => {
@@ -100,7 +99,7 @@ const createWindows = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  ///////////////// WINDOW 1 //////////////////
+  /// ////////////// WINDOW 1 //////////////////
   window1 = new BrowserWindow({
     show: false,
     width: 1024,
@@ -139,7 +138,7 @@ const createWindows = async () => {
     return { action: 'deny' };
   });
 
-  ///////////////// WINDOW 2 //////////////////
+  /// ////////////// WINDOW 2 //////////////////
   window2 = new BrowserWindow({
     show: false,
     width: 1024,
@@ -178,7 +177,7 @@ const createWindows = async () => {
     return { action: 'deny' };
   });
 
-  ///////////////// WINDOW 3 //////////////////
+  /// ////////////// WINDOW 3 //////////////////
   window3 = new BrowserWindow({
     show: false,
     width: 1024,
@@ -242,7 +241,7 @@ app
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if ( (window1 === null) || (window2 === null) || (window3 === null) ) {
+      if (window1 === null || window2 === null || window3 === null) {
         createWindows();
       }
     });
