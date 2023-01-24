@@ -1,6 +1,17 @@
+<img src=".erb/img/app-snapshot.png" width="100%" />
+
 A fork of [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate) with two additional features:
 <li>sqlite3. This repo was initially created as a fork of my template: [electron-react-boilerplate-sqlite3](https://github.com/wds4/electron-react-boilerplate-sqlite3).</li>
 <li>multiple separate renderer windows. Each window is functional both in development and in the packaged app. After the above fork, multi windows was added following the same procedure as outlined in the README to my other template: [electron-react-boilerplate-multiple-windows](https://github.com/wds4/electron-react-boilerplate-multiple-windows).</li>
+
+<br>
+
+You can turn each window on or off by setting these boolean variables in [main.ts](https://github.com/wds4/erb-sqlite3-multiWindows/blob/main/src/main/main.ts) to true or false:
+```
+const win1 = true;
+const win2 = true;
+const win3 = true;
+```
 
 ## Install erb-sqlite3-multiWindows
 
