@@ -19,6 +19,10 @@ import webpackPaths from '../../.erb/configs/webpack.paths';
 
 const sqlite3 = sqlite.verbose();
 
+const win1 = true;
+const win2 = true;
+const win3 = true;
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -26,10 +30,6 @@ class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
-let window1: BrowserWindow | null = null;
-let window2: BrowserWindow | null = null;
-let window3: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -100,121 +100,130 @@ const createWindows = async () => {
   };
 
   /// ////////////// WINDOW 1 //////////////////
-  window1 = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    icon: getAssetPath('icon.png'),
-    webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
-    },
-  });
+  if (win1) {
+    let window1: BrowserWindow | null = null;
+    window1 = new BrowserWindow({
+      show: false,
+      width: 1024,
+      height: 728,
+      icon: getAssetPath('icon.png'),
+      webPreferences: {
+        preload: app.isPackaged
+          ? path.join(__dirname, 'preload.js')
+          : path.join(__dirname, '../../.erb/dll/preload.js'),
+      },
+    });
 
-  window1.loadURL(resolveHtmlPath('index1.html'));
+    window1.loadURL(resolveHtmlPath('index1.html'));
 
-  window1.on('ready-to-show', () => {
-    if (!window1) {
-      throw new Error('"window1" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      window1.minimize();
-    } else {
-      window1.show();
-    }
-  });
+    window1.on('ready-to-show', () => {
+      if (!window1) {
+        throw new Error('"window1" is not defined');
+      }
+      if (process.env.START_MINIMIZED) {
+        window1.minimize();
+      } else {
+        window1.show();
+      }
+    });
 
-  window1.on('closed', () => {
-    window1 = null;
-  });
+    window1.on('closed', () => {
+      window1 = null;
+    });
 
-  const menuBuilder1 = new MenuBuilder(window1);
-  menuBuilder1.buildMenu();
+    const menuBuilder1 = new MenuBuilder(window1);
+    menuBuilder1.buildMenu();
 
-  // Open urls in the user's browser
-  window1.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
-    return { action: 'deny' };
-  });
+    // Open urls in the user's browser
+    window1.webContents.setWindowOpenHandler((edata) => {
+      shell.openExternal(edata.url);
+      return { action: 'deny' };
+    });
+  }
 
   /// ////////////// WINDOW 2 //////////////////
-  window2 = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    icon: getAssetPath('icon.png'),
-    webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
-    },
-  });
+  if (win2) {
+    let window2: BrowserWindow | null = null;
+    window2 = new BrowserWindow({
+      show: false,
+      width: 1024,
+      height: 728,
+      icon: getAssetPath('icon.png'),
+      webPreferences: {
+        preload: app.isPackaged
+          ? path.join(__dirname, 'preload.js')
+          : path.join(__dirname, '../../.erb/dll/preload.js'),
+      },
+    });
 
-  window2.loadURL(resolveHtmlPath('index2.html'));
+    window2.loadURL(resolveHtmlPath('index2.html'));
 
-  window2.on('ready-to-show', () => {
-    if (!window2) {
-      throw new Error('"window2" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      window2.minimize();
-    } else {
-      window2.show();
-    }
-  });
+    window2.on('ready-to-show', () => {
+      if (!window2) {
+        throw new Error('"window2" is not defined');
+      }
+      if (process.env.START_MINIMIZED) {
+        window2.minimize();
+      } else {
+        window2.show();
+      }
+    });
 
-  window2.on('closed', () => {
-    window2 = null;
-  });
+    window2.on('closed', () => {
+      window2 = null;
+    });
 
-  const menuBuilder2 = new MenuBuilder(window2);
-  menuBuilder2.buildMenu();
+    const menuBuilder2 = new MenuBuilder(window2);
+    menuBuilder2.buildMenu();
 
-  // Open urls in the user's browser
-  window2.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
-    return { action: 'deny' };
-  });
+    // Open urls in the user's browser
+    window2.webContents.setWindowOpenHandler((edata) => {
+      shell.openExternal(edata.url);
+      return { action: 'deny' };
+    });
+  }
 
   /// ////////////// WINDOW 3 //////////////////
-  window3 = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    icon: getAssetPath('icon.png'),
-    webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
-    },
-  });
+  if (win3) {
+    let window3: BrowserWindow | null = null;
+    window3 = new BrowserWindow({
+      show: false,
+      width: 1024,
+      height: 728,
+      icon: getAssetPath('icon.png'),
+      webPreferences: {
+        preload: app.isPackaged
+          ? path.join(__dirname, 'preload.js')
+          : path.join(__dirname, '../../.erb/dll/preload.js'),
+      },
+    });
 
-  window3.loadURL(resolveHtmlPath('index3.html'));
+    window3.loadURL(resolveHtmlPath('index3.html'));
 
-  window3.on('ready-to-show', () => {
-    if (!window3) {
-      throw new Error('"window3" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      window3.minimize();
-    } else {
-      window3.show();
-    }
-  });
+    window3.on('ready-to-show', () => {
+      if (!window3) {
+        throw new Error('"window3" is not defined');
+      }
+      if (process.env.START_MINIMIZED) {
+        window3.minimize();
+      } else {
+        window3.show();
+      }
+    });
 
-  window3.on('closed', () => {
-    window3 = null;
-  });
+    window3.on('closed', () => {
+      window3 = null;
+    });
 
-  const menuBuilder3 = new MenuBuilder(window3);
-  menuBuilder3.buildMenu();
+    const menuBuilder3 = new MenuBuilder(window3);
+    menuBuilder3.buildMenu();
 
-  // Open urls in the user's browser
-  window3.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
-    return { action: 'deny' };
-  });
+    // Open urls in the user's browser
+    window3.webContents.setWindowOpenHandler((edata) => {
+      shell.openExternal(edata.url);
+      return { action: 'deny' };
+    });
+  }
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
