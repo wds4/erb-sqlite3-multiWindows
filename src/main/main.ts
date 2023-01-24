@@ -27,6 +27,8 @@ class AppUpdater {
 }
 
 let window1: BrowserWindow | null = null;
+let window2: BrowserWindow | null = null;
+let window3: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -98,6 +100,7 @@ const createWindows = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  ///////////////// WINDOW 1 //////////////////
   window1 = new BrowserWindow({
     show: false,
     width: 1024,
@@ -136,6 +139,84 @@ const createWindows = async () => {
     return { action: 'deny' };
   });
 
+  ///////////////// WINDOW 2 //////////////////
+  window2 = new BrowserWindow({
+    show: false,
+    width: 1024,
+    height: 728,
+    icon: getAssetPath('icon.png'),
+    webPreferences: {
+      preload: app.isPackaged
+        ? path.join(__dirname, 'preload.js')
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
+    },
+  });
+
+  window2.loadURL(resolveHtmlPath('index2.html'));
+
+  window2.on('ready-to-show', () => {
+    if (!window2) {
+      throw new Error('"window2" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      window2.minimize();
+    } else {
+      window2.show();
+    }
+  });
+
+  window2.on('closed', () => {
+    window2 = null;
+  });
+
+  const menuBuilder2 = new MenuBuilder(window2);
+  menuBuilder2.buildMenu();
+
+  // Open urls in the user's browser
+  window2.webContents.setWindowOpenHandler((edata) => {
+    shell.openExternal(edata.url);
+    return { action: 'deny' };
+  });
+
+  ///////////////// WINDOW 3 //////////////////
+  window3 = new BrowserWindow({
+    show: false,
+    width: 1024,
+    height: 728,
+    icon: getAssetPath('icon.png'),
+    webPreferences: {
+      preload: app.isPackaged
+        ? path.join(__dirname, 'preload.js')
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
+    },
+  });
+
+  window3.loadURL(resolveHtmlPath('index3.html'));
+
+  window3.on('ready-to-show', () => {
+    if (!window3) {
+      throw new Error('"window3" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      window3.minimize();
+    } else {
+      window3.show();
+    }
+  });
+
+  window3.on('closed', () => {
+    window3 = null;
+  });
+
+  const menuBuilder3 = new MenuBuilder(window3);
+  menuBuilder3.buildMenu();
+
+  // Open urls in the user's browser
+  window3.webContents.setWindowOpenHandler((edata) => {
+    shell.openExternal(edata.url);
+    return { action: 'deny' };
+  });
+
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
@@ -161,7 +242,9 @@ app
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (window1 === null) createWindows();
+      if ( (window1 === null) || (window2 === null) || (window3 === null) ) {
+        createWindows();
+      }
     });
   })
   .catch(console.log);

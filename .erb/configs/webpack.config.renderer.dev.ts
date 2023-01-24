@@ -51,6 +51,16 @@ const configuration: webpack.Configuration = {
       'webpack/hot/only-dev-server',
       path.join(webpackPaths.srcRendererPath, 'window1/index.tsx'),
     ],
+    window2: [
+      `webpack-dev-server/client?http://localhost:${port}/dist`,
+      'webpack/hot/only-dev-server',
+      path.join(webpackPaths.srcRendererPath, 'window2/index.tsx'),
+    ],
+    window3: [
+      `webpack-dev-server/client?http://localhost:${port}/dist`,
+      'webpack/hot/only-dev-server',
+      path.join(webpackPaths.srcRendererPath, 'window3/index.tsx'),
+    ],
   },
 
   output: {
@@ -156,6 +166,36 @@ const configuration: webpack.Configuration = {
       inject: true,
       chunks: ['window1'],
       template: path.join(webpackPaths.srcRendererPath, 'window1/index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      env: process.env.NODE_ENV,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+      nodeModules: webpackPaths.appNodeModulesPath,
+    }),
+    new HtmlWebpackPlugin({
+      filename: path.join('index2.html'),
+      inject: true,
+      chunks: ['window2'],
+      template: path.join(webpackPaths.srcRendererPath, 'window2/index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      env: process.env.NODE_ENV,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+      nodeModules: webpackPaths.appNodeModulesPath,
+    }),
+    new HtmlWebpackPlugin({
+      filename: path.join('index3.html'),
+      inject: true,
+      chunks: ['window3'],
+      template: path.join(webpackPaths.srcRendererPath, 'window3/index.ejs'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,

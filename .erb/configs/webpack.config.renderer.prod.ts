@@ -27,6 +27,8 @@ const configuration: webpack.Configuration = {
 
   entry: {
     window1: [path.join(webpackPaths.srcRendererPath, 'window1/index.tsx')],
+    window2: [path.join(webpackPaths.srcRendererPath, 'window2/index.tsx')],
+    window3: [path.join(webpackPaths.srcRendererPath, 'window3/index.tsx')],
   },
 
   output: {
@@ -132,6 +134,32 @@ const configuration: webpack.Configuration = {
       inject: true,
       chunks: ['window1'],
       template: path.join(webpackPaths.srcRendererPath, 'window1/index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index2.html',
+      inject: true,
+      chunks: ['window2'],
+      template: path.join(webpackPaths.srcRendererPath, 'window2/index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index3.html',
+      inject: true,
+      chunks: ['window3'],
+      template: path.join(webpackPaths.srcRendererPath, 'window3/index.ejs'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
